@@ -25,7 +25,6 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">Ma Bibliothèque</a>
@@ -35,11 +34,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/books">Livres</a></li>
     
                     @auth
-                        <!-- L'utilisateur est connecté -->
-                        <li class="nav-item"><a class="nav-link" href="/dashboard">Tableau de bord</a></li>
+                        <!-- Si l'utilisateur est connecté -->
+                        <li class="nav-item"><a class="nav-link" href="/books">Livres</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Profil</a></li>
+                        @if(Auth::user() && Auth::user() !== 1)
+                        <li class="nav-item"><a class="nav-link" href="/ListeBorrow">Emprunts</a></li>
+                        @endif
+                        <!-- Bouton Déconnexion -->
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
@@ -47,7 +50,7 @@
                             </form>
                         </li>
                     @else
-                        <!-- L'utilisateur n'est pas connecté -->
+                        <!-- Si l'utilisateur est visiteur (non connecté) -->
                         <li class="nav-item"><a class="nav-link" href="/login">Connexion</a></li>
                         <li class="nav-item"><a class="nav-link" href="/register">Inscription</a></li>
                     @endauth

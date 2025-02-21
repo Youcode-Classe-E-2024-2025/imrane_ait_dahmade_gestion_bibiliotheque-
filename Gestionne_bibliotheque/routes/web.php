@@ -46,3 +46,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+use App\Http\Controllers\BorrowController;
+
+Route::middleware(['auth'])->group(function () {
+    // Route pour emprunter un livre
+    Route::post('/borrow/{book_id}', [BorrowController::class, 'borrow'])->name('borrow');
+
+    // Route pour retourner un livre
+    Route::post('/return/{borrow_id}', [BorrowController::class, 'returnBook'])->name('returnBook');
+});
+
+Route::get('/ListeBorrow' ,[BorrowController::class , 'index']);
