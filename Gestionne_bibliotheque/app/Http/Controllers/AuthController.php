@@ -9,49 +9,55 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Inscription
+    // Afficher le formulaire d'inscription
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
+
+    // Gérer l'inscription
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'Utilisateur créé avec succès']);
+        return redirect()->route('login')->with('success', 'Inscription réussie, vous pouvez vous connecter.');
     }
 
-    // Connexion
+    // Afficher le formulaire de connexion
+    public function showLogin()
+    {
+        return view('auth.login');
+    }
+
+    // Gérer la connexion
     public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         if (Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Connexion réussie']);
+            return redirect()->route('profile.show')->with('success', 'Connexion réussie.');
         }
 
-        return response()->json(['message' => 'Échec de la connexion'], 401);
+        return back()->withErrors(['email' => 'Identifiants incorrects.']);
     }
 
     // Déconnexion
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'Déconnexion réussie']);
-    }
-
-    // Afficher le profil
-    public function profile()
-    {
-        return response()->json(Auth::user());
+        return redirect()->route('login')->with('success', 'Déconnexion réussie.');
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+\App\Models\Book::factory(20)->create();
 
 class DatabaseSeeder extends Seeder
 {
